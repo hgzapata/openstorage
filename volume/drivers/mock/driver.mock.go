@@ -322,6 +322,19 @@ func (mr *MockVolumeDriverMockRecorder) GetActiveRequests() *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetActiveRequests", reflect.TypeOf((*MockVolumeDriver)(nil).GetActiveRequests))
 }
 
+// GroupSnapshot mocks base method
+func (m *MockVolumeDriver) GroupSnapshot(arg0 string, arg1 map[string]string) (*api.GroupSnapCreateResponse, error) {
+	ret := m.ctrl.Call(m, "GroupSnapshot", arg0, arg1)
+	ret0, _ := ret[0].(*api.GroupSnapCreateResponse)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GroupSnapshot indicates an expected call of GroupSnapshot
+func (mr *MockVolumeDriverMockRecorder) GroupSnapshot(arg0, arg1 interface{}) *gomock.Call {
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GroupSnapshot", reflect.TypeOf((*MockVolumeDriver)(nil).GroupSnapshot), arg0, arg1)
+}
+
 // Inspect mocks base method
 func (m *MockVolumeDriver) Inspect(arg0 []string) ([]*api.Volume, error) {
 	ret := m.ctrl.Call(m, "Inspect", arg0)

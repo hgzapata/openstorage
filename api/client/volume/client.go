@@ -4,20 +4,22 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
-	"github.com/libopenstorage/openstorage/api"
-	"github.com/libopenstorage/openstorage/api/client"
-	"github.com/libopenstorage/openstorage/volume"
 	"io"
 	"io/ioutil"
 	"strconv"
+
+	"github.com/libopenstorage/openstorage/api"
+	"github.com/libopenstorage/openstorage/api/client"
+	"github.com/libopenstorage/openstorage/volume"
 )
 
 const (
-	graphPath  = "/graph"
-	volumePath = "/osd-volumes"
-	snapPath   = "/osd-snapshot"
-	credsPath  = "/osd-creds"
-	backupPath = "/osd-backup"
+	graphPath     = "/graph"
+	volumePath    = "/osd-volumes"
+	snapPath      = "/osd-snapshot"
+	credsPath     = "/osd-creds"
+	backupPath    = "/osd-backup"
+	volgroupsPath = "/osd-volgroups"
 )
 
 type volumeClient struct {
@@ -657,4 +659,24 @@ func (v *volumeClient) CloudBackupSchedEnumerate() (*api.CloudBackupSchedEnumera
 		return nil, err
 	}
 	return enumerateResponse, nil
+}
+
+func (v *volumeClient) GroupSnapshot(groupID string, labels map[string]string) (*api.GroupSnapCreateResponse, error) {
+
+	response := &api.GroupSnapCreateResponse{}
+	request := &api.GroupSnapCreateRequest{
+		Id:     groupID,
+		Labels: labels,
+	}
+
+	req := v.c.Post().Resource(snapPath + "/groupsnap").Body(request)
+	res := req.Do()
+	if res.Error() != nil {
+		return nil, res.FormatError()
+	}
+
+	if err := res.Unmarshal(&response); err != nil {
+		return nil, err
+	}
+	return response, nil
 }
